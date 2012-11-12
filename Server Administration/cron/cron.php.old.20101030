@@ -1,0 +1,38 @@
+#!/usr/bin/php -q
+<?php
+
+
+require_once('config.php');
+
+// Declare vars for database. Nothing done yet.
+define('CRON_RUN',false);
+define('BACKUP_MYSQL',false);
+define('BACKUP_WP',false);
+define('BACKUP_SITES',false);
+define('DAILY_DEAL',false);
+
+class Cron {
+
+	function __construct() 
+	{
+		$this->db = new Db();
+		$this->error = new Error();
+	}
+	
+	function init()
+	{
+		$this->backupMysql();
+	}
+	
+	function backupMysql($db=null)
+	{
+		$backupFile = date("Y-m-d-H-i-s") . '.sql';
+		$command = "mysqldump --all-databases > $backupFile";
+		system($command);
+	}
+
+}
+
+mail('piercemoore@gmail.com','Cron working!','The cronjob you installed is working. Lucky you.');
+
+?>
